@@ -70,8 +70,8 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Query
         {
             // arrange
 
-            var handler = new GetAllBooksHandler(mockBookRepository.Object, mapper);
-            var query = new GetAllBooksQuery() { Page = 1, Size = 10 };
+            var handler = new GetBookByCategoryNameHandler(mapper, mockBookRepository.Object);
+            var query = new GetBookByCategoryName() { CategoryName = "Software Engineering" };
 
             //act 
             var books = await handler.Handle(query, CancellationToken.None);

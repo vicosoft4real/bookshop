@@ -16,7 +16,7 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Commands
     public class CreateBookTest
     {
         private readonly IMapper mapper;
-        private readonly Mock<IAsyncRepository<Domain.Entities.Books>> mockBookRepository;
+        private readonly Mock<IBookRepository> mockBookRepository;
 
         public CreateBookTest()
         {
