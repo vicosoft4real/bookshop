@@ -5,7 +5,6 @@ using AutoMapper;
 using Moq;
 using Ponea.Homework.Bookshop.Application.Contracts.Persistence;
 using Ponea.Homework.Bookshop.Application.Features.Book.Commands.Create;
-using Ponea.Homework.Bookshop.Application.Features.Book.Query;
 using Ponea.Homework.Bookshop.Application.Profile;
 using Ponea.Homework.Bookshop.Application.UnitTests.Mocks;
 using Shouldly;

@@ -81,5 +81,22 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Query
             books.Count.ShouldBe(3);
 
         }
+
+        [Fact]
+        public async Task Get_books_AuthName()
+        {
+            // arrange
+
+            var handler = new GetBookByAuthorNameQueryHandler(mapper, mockBookRepository.Object);
+            var query = new GetBookByAuthorNameQuery() { AuthName = "Adebayo" };
+
+            //act 
+            var books = await handler.Handle(query, CancellationToken.None);
+
+            //asset
+            books.ShouldBeOfType<List<GetBookResponse>>();
+            books.Count.ShouldBe(2);
+
+        }
     }
 }

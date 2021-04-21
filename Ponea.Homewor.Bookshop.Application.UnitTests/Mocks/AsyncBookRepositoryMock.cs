@@ -107,7 +107,7 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                     new()
                     {
                         Id = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
-                        FirstName = "Adebayo",
+                        FirstName = "Tope",
                         LastName = "Sogo",
 
                     },

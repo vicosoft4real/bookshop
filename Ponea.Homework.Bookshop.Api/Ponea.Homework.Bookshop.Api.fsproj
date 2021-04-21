@@ -1,0 +1,32 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <UserSecretsId>e0f97a0b-8058-414a-94a3-d3acefc22f9a</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="WeatherForecast.fs" />
+    <Compile Include="Controllers/WeatherForecastController.fs" />
+    <Compile Include="Startup.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Dockerfile" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.1.3" />
+  </ItemGroup>
+
+</Project>
