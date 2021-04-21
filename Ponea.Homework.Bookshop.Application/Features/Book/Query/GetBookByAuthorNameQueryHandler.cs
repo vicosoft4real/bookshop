@@ -44,6 +44,7 @@ namespace Ponea.Homework.Bookshop.Application.Features.Book.Query
             var quey = await bookRepository.GetBooksByAuthorName(request.AuthName);
 
             return mapper.Map<List<GetBookResponse>>(quey);
+
         }
     }
 }
