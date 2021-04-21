@@ -11,25 +11,28 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
 {
     public class AsyncBookRepositoryMock
     {
-        public static Mock<IAsyncRepository<Domain.Entities.Books>> GetBooksRepository()
+        public static Mock<IBookRepository> GetBooksRepository()
         {
+            var cat1 = new Category()
+            {
+                Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                Title = "Software Engineering"
+            };
+            var cat2 = new Category()
+            {
+                Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                Title = "Software Engineering"
+            };
+            var cat3 = new Category()
+            {
+                Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                Title = "Software Engineering"
+            };
             var categories = new List<Category>()
             {
-                new Category()
-                {
-                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
-                    Title = "Software Engineering"
-                },
-                new Category()
-                {
-                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
-                    Title = "Software Engineering"
-                },
-                new Category()
-                {
-                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
-                    Title = "Software Engineering"
-                }
+              cat1,
+              cat2,
+              cat3
             };
             var books = new List<Domain.Entities.Books>()
             {
@@ -54,9 +57,12 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                             FirstName = "Samson",
                             LastName = "Godwin",
 
+
                         },
 
+
                     },
+                    Category = cat1
 
 
 
@@ -86,7 +92,7 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                         }
                     },
 
-
+                    Category = cat2
 
 
                 },
@@ -114,13 +120,13 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                     }
                 },
 
-
+                Category = cat3
 
 
             }
             };
 
-            var mockBookRepository = new Mock<IAsyncRepository<Domain.Entities.Books>>();
+            var mockBookRepository = new Mock<IBookRepository>();
 
             mockBookRepository.Setup(repo => repo.GetAll(It.IsAny<int>(), It.IsAny<int>(), CancellationToken.None))
                 .ReturnsAsync((int page, int size, CancellationToken _) => books.Skip((page - 1) * size).Take(size).ToList());
@@ -190,6 +196,18 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                     return false;
                 });
 
+            mockBookRepository.Setup(x => x.GetBooksByAuthorName(It.IsAny<string>())).ReturnsAsync((string name) =>
+            {
+                return books.Where(x => x.Authors.Any(author => author.FirstName == name)
+                                        || x.Authors.Any(author => author.LastName == name))
+                    .ToList();
+            });
+
+            mockBookRepository.Setup(repo => repo.GetBooksByCategory(It.IsAny<string>()))
+                .ReturnsAsync((string name) =>
+                {
+                    return books.Where(c => c.Category.Title.Equals(name)).ToList();
+                });
 
             return mockBookRepository;
         }

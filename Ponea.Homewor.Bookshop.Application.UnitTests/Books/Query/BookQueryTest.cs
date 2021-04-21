@@ -16,7 +16,8 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Query
     public class BookQueryTest
     {
         private readonly IMapper mapper;
-        private readonly Mock<IAsyncRepository<Domain.Entities.Books>> mockBookRepository;
+        private readonly Mock<IBookRepository> mockBookRepository;
+
 
         public BookQueryTest()
         {
@@ -48,6 +49,24 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Query
 
         [Fact]
         public async Task GetAll_Book_should_return_All_book()
+        {
+            // arrange
+
+            var handler = new GetAllBooksHandler(mockBookRepository.Object, mapper);
+            var query = new GetAllBooksQuery() { Page = 1, Size = 10 };
+
+            //act 
+            var books = await handler.Handle(query, CancellationToken.None);
+
+            //asset
+            books.ShouldBeOfType<List<GetBookResponse>>();
+            books.Count.ShouldBe(3);
+
+
+        }
+
+        [Fact]
+        public async Task Get_books_ByCateGoryName()
         {
             // arrange
 

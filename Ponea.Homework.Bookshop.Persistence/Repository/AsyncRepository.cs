@@ -17,7 +17,10 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
     /// <seealso cref="Ponea.Homework.Bookshop.Application.Contracts.Persistence.IAsyncRepository{T}" />
     public class AsyncRepository<T> : IAsyncRepository<T> where T : AuditableEntity
     {
-        private readonly PoneaBookshopDbContext poneaBookshopContext;
+        /// <summary>
+        /// 
+        /// </summary>
+        protected readonly PoneaBookshopDbContext PoneaBookshopContext;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AsyncRepository{T}"/> class.
@@ -25,7 +28,7 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <param name="poneaBookshopContext">The ponea bookshop context.</param>
         public AsyncRepository(PoneaBookshopDbContext poneaBookshopContext)
         {
-            this.poneaBookshopContext = poneaBookshopContext;
+            this.PoneaBookshopContext = poneaBookshopContext;
         }
 
         /// <summary>
@@ -37,7 +40,7 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<IReadOnlyList<T>> GetAll(int page, int size, CancellationToken cancellationToken = default)
         {
-            return await poneaBookshopContext.Set<T>()
+            return await PoneaBookshopContext.Set<T>()
                 .Where(x => !x.IsDeleted)
                 .Skip((page - 1) * size).Take(size)
                 .AsNoTracking()
@@ -53,7 +56,7 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<T> GetById(Guid id, CancellationToken cancellationToken = default)
         {
-            return await poneaBookshopContext.Set<T>().FindAsync(id);
+            return await PoneaBookshopContext.Set<T>().FindAsync(id);
         }
 
         /// <summary>
@@ -64,8 +67,8 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<T> Create(T entity, CancellationToken cancellationToken = default)
         {
-            await poneaBookshopContext.Set<T>().AddAsync(entity, cancellationToken);
-            await poneaBookshopContext.SaveChangesAsync(cancellationToken);
+            await PoneaBookshopContext.Set<T>().AddAsync(entity, cancellationToken);
+            await PoneaBookshopContext.SaveChangesAsync(cancellationToken);
 
             return entity;
 
@@ -78,11 +81,11 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
         {
-            var entity = await poneaBookshopContext.Set<T>().FindAsync(id);
+            var entity = await PoneaBookshopContext.Set<T>().FindAsync(id);
             if (entity != null)
             {
                 entity.IsDeleted = true;
-                await poneaBookshopContext.SaveChangesAsync(cancellationToken);
+                await PoneaBookshopContext.SaveChangesAsync(cancellationToken);
                 return true;
             }
 
@@ -96,8 +99,8 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<bool> Update(T entity, CancellationToken cancellationToken = default)
         {
-            poneaBookshopContext.Entry(entity).State = EntityState.Modified;
-            await poneaBookshopContext.SaveChangesAsync(cancellationToken);
+            PoneaBookshopContext.Entry(entity).State = EntityState.Modified;
+            await PoneaBookshopContext.SaveChangesAsync(cancellationToken);
             return true;
         }
 
@@ -109,7 +112,7 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<IReadOnlyList<T>> GetBy(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await poneaBookshopContext.Set<T>().Where(predicate).ToArrayAsync(cancellationToken);
+            return await PoneaBookshopContext.Set<T>().Where(predicate).ToArrayAsync(cancellationToken);
         }
 
         /// <summary>
@@ -120,7 +123,7 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
-            return await poneaBookshopContext.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
+            return await PoneaBookshopContext.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
         }
     }
 }
