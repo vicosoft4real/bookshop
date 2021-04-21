@@ -25,9 +25,4 @@
     <ProjectReference Include="..\Ponea.Homework.Bookshop.Application\Ponea.Homework.Bookshop.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Books\Commands\" />
-    <Folder Include="Books\Query\" />
-  </ItemGroup>
-
 </Project>

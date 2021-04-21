@@ -14,6 +14,7 @@ namespace Ponea.Homework.Bookshop.Application.Features.Book.Commands.Create
         {
             RuleFor(x => x.IsbnCode).NotEmpty().WithMessage("The {PropertyName} code is required");
             RuleFor(x => x.Title).NotEmpty().WithMessage("The {PropertyName} is required");
+            RuleFor(x => x.CategoryId).NotEmpty().WithErrorCode("The book category is required");
         }
     }
 }

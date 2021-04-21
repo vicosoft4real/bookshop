@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ponea.Homework.Bookshop.Application.Contracts.Persistence;
 using Ponea.Homework.Bookshop.Domain.Common;
-using static System.Guid;
 
 namespace Ponea.Homework.Bookshop.Persistence.Repository
 {
@@ -45,15 +44,16 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
                 .ToListAsync(cancellationToken);
 
         }
+
         /// <summary>
         /// Gets the by identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<T> GetById(string id, CancellationToken cancellationToken = default)
+        public async Task<T> GetById(Guid id, CancellationToken cancellationToken = default)
         {
-            return await poneaBookshopContext.Set<T>().FindAsync(Parse(id));
+            return await poneaBookshopContext.Set<T>().FindAsync(id);
         }
 
         /// <summary>
@@ -76,9 +76,9 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <param name="id">The identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<bool> Delete(string id, CancellationToken cancellationToken = default)
+        public async Task<bool> Delete(Guid id, CancellationToken cancellationToken = default)
         {
-            var entity = await poneaBookshopContext.Set<T>().FindAsync(Guid.Parse(id));
+            var entity = await poneaBookshopContext.Set<T>().FindAsync(id);
             if (entity != null)
             {
                 entity.IsDeleted = true;
@@ -110,6 +110,17 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         public async Task<IReadOnlyList<T>> GetBy(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
         {
             return await poneaBookshopContext.Set<T>().Where(predicate).ToArrayAsync(cancellationToken);
+        }
+
+        /// <summary>
+        /// Gets the first or defaultt.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default)
+        {
+            return await poneaBookshopContext.Set<T>().FirstOrDefaultAsync(predicate, cancellationToken);
         }
     }
 }

@@ -43,9 +43,15 @@ namespace Ponea.Homework.Bookshop.Application.Features.Book.Commands.Create
             if (validateResult.Errors.Count > 0)
                 return (false, "Validation failed", validateResult.Errors.Select(x => x.ErrorMessage).ToArray());
 
-            var book = await asyncRepository.Create(mapper.Map<Books>(request), cancellationToken);
+            var exist = await asyncRepository.GetFirstOrDefault(
+                (x => x.IsbnCode.Equals(request.IsbnCode) || x.Title.Equals(request.Title) && !x.IsDeleted), cancellationToken);
+            if (exist != null) return (false, string.Empty, new[] { "The title or isbn code has already been created" });
 
-            return (true, book?.Id.ToString(), Array.Empty<string>());
+            var book = await asyncRepository.Create(mapper.Map<Books>(request), cancellationToken);
+            if (book != null && book.Id != Guid.Empty)
+                return (true, book.Id.ToString(), Array.Empty<string>());
+
+            return (false, string.Empty, new[] { "The book cannot created at the moment " });
 
 
 

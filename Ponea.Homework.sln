@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ponea.Homework.Bookshop.Per
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ponea.Homework.Bookshop.Identity", "Ponea.Homework.Bookshop.Identity\Ponea.Homework.Bookshop.Identity.csproj", "{49198267-9E95-41E0-9A08-2A991AE01B12}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ponea.Homewor.Bookshop.Application.UnitTests", "Ponea.Homewor.Bookshop.Application.UnitTests\Ponea.Homewor.Bookshop.Application.UnitTests.csproj", "{481C02D6-0DCE-4875-A4BA-E94A385909A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ponea.Homework.Bookshop.Application.UnitTests", "Ponea.Homewor.Bookshop.Application.UnitTests\Ponea.Homework.Bookshop.Application.UnitTests.csproj", "{481C02D6-0DCE-4875-A4BA-E94A385909A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

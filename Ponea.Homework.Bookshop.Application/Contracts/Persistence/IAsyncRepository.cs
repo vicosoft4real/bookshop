@@ -21,13 +21,14 @@ namespace Ponea.Homework.Bookshop.Application.Contracts.Persistence
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         Task<IReadOnlyList<T>> GetAll(int page, int size, CancellationToken cancellationToken = default);
+
         /// <summary>
         /// Gets the by identifier.
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<T> GetById(string id, CancellationToken cancellationToken = default);
+        Task<T> GetById(Guid id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Creates the specified entity.
@@ -43,7 +44,7 @@ namespace Ponea.Homework.Bookshop.Application.Contracts.Persistence
         /// <param name="id">The identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<bool> Delete(string id, CancellationToken cancellationToken = default);
+        Task<bool> Delete(Guid id, CancellationToken cancellationToken = default);
         /// <summary>
         /// Updates the specified entity.
         /// </summary>
@@ -60,6 +61,14 @@ namespace Ponea.Homework.Bookshop.Application.Contracts.Persistence
         /// <returns></returns>
         Task<IReadOnlyList<T>> GetBy(Expression<Func<T, bool>> predicate,
             CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Gets the first or defaultt.
+        /// </summary>
+        /// <param name="predicate">The predicate.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<T> GetFirstOrDefault(Expression<Func<T, bool>> predicate, CancellationToken cancellationToken = default);
 
 
 

@@ -7,13 +7,31 @@ using Moq;
 using Ponea.Homework.Bookshop.Application.Contracts.Persistence;
 using Ponea.Homework.Bookshop.Domain.Entities;
 
-namespace Ponea.Homewor.Bookshop.Application.UnitTests.Mocks
+namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
 {
     public class AsyncBookRepositoryMock
     {
-        public static Mock<IAsyncRepository<Books>> GetBooksRepository()
+        public static Mock<IAsyncRepository<Domain.Entities.Books>> GetBooksRepository()
         {
-            var books = new List<Books>()
+            var categories = new List<Category>()
+            {
+                new Category()
+                {
+                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                    Title = "Software Engineering"
+                },
+                new Category()
+                {
+                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                    Title = "Software Engineering"
+                },
+                new Category()
+                {
+                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                    Title = "Software Engineering"
+                }
+            };
+            var books = new List<Domain.Entities.Books>()
             {
                 new()
                 {
@@ -36,13 +54,10 @@ namespace Ponea.Homewor.Bookshop.Application.UnitTests.Mocks
                             FirstName = "Samson",
                             LastName = "Godwin",
 
-                        }
+                        },
+
                     },
-                    Category = new Category()
-                    {
-                        Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
-                        Title = "Software Engineering"
-                    }
+
 
 
 
@@ -70,11 +85,7 @@ namespace Ponea.Homewor.Bookshop.Application.UnitTests.Mocks
 
                         }
                     },
-                    Category = new Category()
-                    {
-                        Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
-                        Title = "Software Engineering"
-                    }
+
 
 
 
@@ -102,44 +113,46 @@ namespace Ponea.Homewor.Bookshop.Application.UnitTests.Mocks
 
                     }
                 },
-                Category = new Category()
-                {
-                    Id = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
-                    Title = "Software Engineering"
-                }
+
 
 
 
             }
             };
 
-            var mockBookRepository = new Mock<IAsyncRepository<Books>>();
+            var mockBookRepository = new Mock<IAsyncRepository<Domain.Entities.Books>>();
 
             mockBookRepository.Setup(repo => repo.GetAll(It.IsAny<int>(), It.IsAny<int>(), CancellationToken.None))
-                .ReturnsAsync((int page, int size, CancellationToken _) => books.Skip((page - 1) * size).Skip(size).ToList());
+                .ReturnsAsync((int page, int size, CancellationToken _) => books.Skip((page - 1) * size).Take(size).ToList());
 
-            mockBookRepository.Setup(repo => repo.Create(It.IsAny<Books>(), CancellationToken.None))
-                .ReturnsAsync((Books book) =>
+            mockBookRepository.Setup(repo => repo.Create(It.IsAny<Domain.Entities.Books>(), CancellationToken.None))
+                .ReturnsAsync((Domain.Entities.Books book, CancellationToken _) =>
                 {
-                    books.Add(book);
+                    var existCategory = categories.FirstOrDefault(x => x.Id == book.CategoryId);
+                    if (existCategory != null)
+                    {
+                        books.Add(book);
+                        book.Id = Guid.NewGuid();
+                    }
+
                     return book;
                 });
 
 
-            // getBy
-            mockBookRepository.Setup(repo => repo.GetById(It.IsAny<string>(), CancellationToken.None))
-                .ReturnsAsync((string id, CancellationToken _) =>
+            // getBy id
+            mockBookRepository.Setup(repo => repo.GetById(It.IsAny<Guid>(), CancellationToken.None))
+                .ReturnsAsync((Guid id, CancellationToken _) =>
                 {
-                    var book = books.Find(x => x.Id == Guid.Parse(id));
+                    var book = books.FirstOrDefault(x => x.Id.Equals(id));
                     return book;
                 });
 
 
             // delete
-            mockBookRepository.Setup(repo => repo.Delete(It.IsAny<string>(), CancellationToken.None))
-                .ReturnsAsync((string id, CancellationToken _) =>
+            mockBookRepository.Setup(repo => repo.Delete(It.IsAny<Guid>(), CancellationToken.None))
+                .ReturnsAsync((Guid id, CancellationToken _) =>
                 {
-                    var book = books.Find(x => x.Id == Guid.Parse(id));
+                    var book = books.FirstOrDefault(x => x.Id.Equals(id));
                     if (book != null)
                     {
                         book.IsDeleted = true;
@@ -150,13 +163,17 @@ namespace Ponea.Homewor.Bookshop.Application.UnitTests.Mocks
 
             //get by
             mockBookRepository.Setup(repo =>
-                    repo.GetBy(It.IsAny<Expression<Func<Books, bool>>>(), CancellationToken.None))
-                .ReturnsAsync((Func<Books, bool> p, CancellationToken _) => books.Where(p).ToList());
+                    repo.GetBy(It.IsAny<Expression<Func<Domain.Entities.Books, bool>>>(), CancellationToken.None))
+                .ReturnsAsync((Expression<Func<Domain.Entities.Books, bool>> p, CancellationToken _) => books.AsQueryable().Where(p).ToList());
 
+            //first or default
+            mockBookRepository.Setup(repo =>
+                    repo.GetFirstOrDefault(It.IsAny<Expression<Func<Domain.Entities.Books, bool>>>(), CancellationToken.None))
+                .ReturnsAsync((Expression<Func<Domain.Entities.Books, bool>> p, CancellationToken _) => books.AsQueryable().FirstOrDefault(p));
 
             //update
-            mockBookRepository.Setup(repo => repo.Update(It.IsAny<Books>(), CancellationToken.None))
-                .ReturnsAsync((Books book, CancellationToken _) =>
+            mockBookRepository.Setup(repo => repo.Update(It.IsAny<Domain.Entities.Books>(), CancellationToken.None))
+                .ReturnsAsync((Domain.Entities.Books book, CancellationToken _) =>
                 {
                     var exist = books.Find(x => x.Id == book.Id);
                     if (exist != null)

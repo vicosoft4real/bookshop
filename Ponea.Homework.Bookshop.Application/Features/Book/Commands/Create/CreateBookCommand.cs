@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MediatR;
 using Ponea.Homework.Bookshop.Application.Contracts.Common;
 using Ponea.Homework.Bookshop.Domain.Entities;
@@ -34,7 +35,7 @@ namespace Ponea.Homework.Bookshop.Application.Features.Book.Commands.Create
         /// <value>
         /// The category identifier.
         /// </value>
-        public string CategoryId { get; set; }
+        public Guid CategoryId { get; set; }
 
         /// <summary>
         /// Gets or sets the authors.
