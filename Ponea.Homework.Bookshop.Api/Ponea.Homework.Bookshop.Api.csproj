@@ -2,20 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <UserSecretsId>e0f97a0b-8058-414a-94a3-d3acefc22f9a</UserSecretsId>
+    <UserSecretsId>420f33ee-78ce-49b1-908e-8da6169c40a3</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Compile Include="WeatherForecast.fs" />
-    <Compile Include="Controllers/WeatherForecastController.fs" />
-    <Compile Include="Startup.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Dockerfile" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="9.0.0" />

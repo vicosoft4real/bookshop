@@ -7,14 +7,14 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["Ponea.Homework.Bookshop.Api/Ponea.Homework.Bookshop.Api.fsproj", "Ponea.Homework.Bookshop.Api/"]
-RUN dotnet restore "Ponea.Homework.Bookshop.Api/Ponea.Homework.Bookshop.Api.fsproj"
+COPY ["Ponea.Homework.Bookshop.Api/Ponea.Homework.Bookshop.Api.csproj", "Ponea.Homework.Bookshop.Api/"]
+RUN dotnet restore "Ponea.Homework.Bookshop.Api/Ponea.Homework.Bookshop.Api.csproj"
 COPY . .
 WORKDIR "/src/Ponea.Homework.Bookshop.Api"
-RUN dotnet build "Ponea.Homework.Bookshop.Api.fsproj" -c Release -o /app/build
+RUN dotnet build "Ponea.Homework.Bookshop.Api.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Ponea.Homework.Bookshop.Api.fsproj" -c Release -o /app/publish
+RUN dotnet publish "Ponea.Homework.Bookshop.Api.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
