@@ -6,14 +6,49 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Ponea.Homework.Bookshop.Identity.Models;
+using Ponea.Homework.Bookshop.Identity.Seed;
+using Serilog;
 
 namespace Ponea.Homework.Bookshop.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            var config = new ConfigurationBuilder()
+                .AddJsonFile($"appsettings.{env}.json")
+                .Build();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .WriteTo.File("Log/log-.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
+            var host = CreateHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var loggerFactory = services.GetRequiredService<ILoggerFactory>();
+
+                try
+                {
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+                    await SeedUsers.SeedAsync(userManager);
+                    Log.Information("Application Starting");
+                }
+                catch (Exception ex)
+                {
+                    Log.Warning(ex, "An error occured while starting the application");
+                }
+            }
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

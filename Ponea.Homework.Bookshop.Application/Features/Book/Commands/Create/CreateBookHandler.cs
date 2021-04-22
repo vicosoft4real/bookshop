@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,14 +16,14 @@ namespace Ponea.Homework.Bookshop.Application.Features.Book.Commands.Create
     public class CreateBookHandler : IRequestHandler<CreateBookCommand, (bool Succeed, string Id, string[] ValidationError)>
     {
         private readonly IMapper mapper;
-        private readonly IAsyncRepository<Books> asyncRepository;
+        private readonly IBookRepository asyncRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateBookHandler"/> class.
         /// </summary>
         /// <param name="mapper">The mapper.</param>
         /// <param name="asyncRepository">The asynchronous repository.</param>
-        public CreateBookHandler(IMapper mapper, IAsyncRepository<Books> asyncRepository)
+        public CreateBookHandler(IMapper mapper, IBookRepository asyncRepository)
         {
             this.mapper = mapper;
             this.asyncRepository = asyncRepository;
@@ -47,7 +48,7 @@ namespace Ponea.Homework.Bookshop.Application.Features.Book.Commands.Create
                 (x => x.IsbnCode.Equals(request.IsbnCode) || x.Title.Equals(request.Title) && !x.IsDeleted), cancellationToken);
             if (exist != null) return (false, string.Empty, new[] { "The title or isbn code has already been created" });
 
-            var book = await asyncRepository.Create(mapper.Map<Books>(request), cancellationToken);
+            var book = await asyncRepository.CreateBook(mapper.Map<Books>(request), mapper.Map<List<Domain.Entities.Author>>(request.Authors));
             if (book != null && book.Id != Guid.Empty)
                 return (true, book.Id.ToString(), Array.Empty<string>());
 

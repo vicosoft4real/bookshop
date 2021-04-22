@@ -35,11 +35,11 @@ namespace Ponea.Homework.Bookshop.Domain.Entities
         public string LastName { get; set; }
 
         /// <summary>
-        /// Gets or sets the books.
+        /// Gets or sets the book authors.
         /// </summary>
         /// <value>
-        /// The books.
+        /// The book authors.
         /// </value>
-        public List<Books> Books { get; set; }
+        public List<BookAuthor> BookAuthors { get; set; }
     }
 }

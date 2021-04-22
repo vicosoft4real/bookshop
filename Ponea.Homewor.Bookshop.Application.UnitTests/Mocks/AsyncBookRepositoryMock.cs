@@ -42,20 +42,28 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                     Title = "Expert in c# 9",
                     PublishedDate = new DateTime(2019, 09, 2),
                     Id = Guid.Parse("{B0788D2F-8003-43C1-92A4-EDC76A7C5DDE}"),
-                    Authors = new List<Author>()
+                    BookAuthors = new List<BookAuthor>()
                     {
                         new()
                         {
-                            Id = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
-                            FirstName = "Adebayo",
-                            LastName = "Sogo",
+                            AuthorId = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
+                            BookId = Guid.Parse("{B0788D2F-8003-43C1-92A4-EDC76A7C5DDE}"),
+                            Author = new Author()
+                            {
+                                FirstName = "Akin",
+                                LastName = "Bode"
+                            }
 
                         },
                         new()
                         {
-                            Id = Guid.Parse("{FD8A6434-6485-4CED-8D17-03FFCFC4D7FF}"),
-                            FirstName = "Samson",
-                            LastName = "Godwin",
+                            AuthorId = Guid.Parse("{FD8A6434-6485-4CED-8D17-03FFCFC4D7FF}"),
+                            BookId = Guid.Parse("{B0788D2F-8003-43C1-92A4-EDC76A7C5DDE}"),
+                            Author = new Author()
+                            {
+                                FirstName = "Akin",
+                                LastName = "Bode"
+                            }
 
 
                         },
@@ -74,21 +82,28 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                     Title = "Advance design pattern in c#",
                     PublishedDate = new DateTime(2021, 04, 2),
                     Id = Guid.Parse("{F1DFAD86-1A91-4E84-8AF9-C416108A10E6}"),
-                    Authors = new List<Author>()
+                    BookAuthors = new List<BookAuthor>()
                     {
                         new()
                         {
-                            Id = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
-                            FirstName = "Adebayo",
-                            LastName = "Sogo",
+                            AuthorId = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
+                            BookId = Guid.Parse("{F1DFAD86-1A91-4E84-8AF9-C416108A10E6}"),
+                            Author = new Author()
+                            {
+                                FirstName = "Akin",
+                                LastName = "Bode"
+                            }
 
                         },
                         new()
                         {
-                            Id = Guid.Parse("{FD8A6434-6485-4CED-8D17-03FFCFC4D7FF}"),
-                            FirstName = "Samson",
-                            LastName = "Godwin",
-
+                            AuthorId = Guid.Parse("{FD8A6434-6485-4CED-8D17-03FFCFC4D7FF}"),
+                            BookId =  Guid.Parse("{F1DFAD86-1A91-4E84-8AF9-C416108A10E6}"),
+                            Author = new Author()
+                            {
+                                FirstName = "Akin",
+                                LastName = "Bode"
+                            }
                         }
                     },
 
@@ -102,21 +117,28 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                 Title = ".Net 5 Overview",
                 PublishedDate = new DateTime(2021, 1, 1),
                 Id = Guid.Parse("{AF62A530-255D-4FAD-801B-A4BB99C18D69}"),
-                Authors = new List<Author>()
+                BookAuthors = new List<BookAuthor>()
                 {
                     new()
                     {
-                        Id = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
-                        FirstName = "Tope",
-                        LastName = "Sogo",
+                        AuthorId = Guid.Parse("{E45202D7-F92D-4CB7-9302-A5EBEE99B1C7}"),
+                     BookId = Guid.Parse("{AF62A530-255D-4FAD-801B-A4BB99C18D69}"),
+                     Author = new Author()
+                     {
+                         FirstName = "Akin",
+                         LastName = "Bode"
+                     }
 
                     },
                     new()
                     {
-                        Id = Guid.Parse("{FD8A6434-6485-4CED-8D17-03FFCFC4D7FF}"),
-                        FirstName = "Samson",
-                        LastName = "Godwin",
-
+                        AuthorId = Guid.Parse("{FD8A6434-6485-4CED-8D17-03FFCFC4D7FF}"),
+                        BookId = Guid.Parse("{AF62A530-255D-4FAD-801B-A4BB99C18D69}"),
+                        Author = new Author()
+                        {
+                            FirstName = "Akin",
+                            LastName = "Bode"
+                        }
                     }
                 },
 
@@ -198,8 +220,8 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
 
             mockBookRepository.Setup(x => x.GetBooksByAuthorName(It.IsAny<string>())).ReturnsAsync((string name) =>
             {
-                return books.Where(x => x.Authors.Any(author => author.FirstName == name)
-                                        || x.Authors.Any(author => author.LastName == name))
+                return books.Where(x => x.BookAuthors.Any(author => author.Author.FirstName == name)
+                                        || x.BookAuthors.Any(author => author.Author.LastName == name))
                     .ToList();
             });
 
@@ -209,6 +231,25 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Mocks
                     return books.Where(c => c.Category.Title.Equals(name)).ToList();
                 });
 
+            mockBookRepository.Setup(repo =>
+                    repo.CreateBook(It.IsAny<Domain.Entities.Books>(), It.IsAny<List<Author>>()))
+                .ReturnsAsync((Domain.Entities.Books book, List<Author> authors) =>
+                {
+                    var existCategory = categories.FirstOrDefault(x => x.Id == book.CategoryId);
+                    if (existCategory != null)
+                    {
+                        book.Id = Guid.NewGuid();
+                        book.BookAuthors = new List<BookAuthor>();
+                        foreach (var author in authors)
+                        {
+                            book.BookAuthors.Add(new BookAuthor() { Author = author, BookId = book.Id });
+                        }
+
+                        books.Add(book);
+                    }
+
+                    return book;
+                });
             return mockBookRepository;
         }
     }

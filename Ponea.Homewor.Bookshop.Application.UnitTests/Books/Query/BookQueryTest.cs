@@ -88,14 +88,14 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Query
             // arrange
 
             var handler = new GetBookByAuthorNameQueryHandler(mapper, mockBookRepository.Object);
-            var query = new GetBookByAuthorNameQuery() { AuthName = "Adebayo" };
+            var query = new GetBookByAuthorNameQuery() { AuthName = "Akin" };
 
             //act 
             var books = await handler.Handle(query, CancellationToken.None);
 
             //asset
             books.ShouldBeOfType<List<GetBookResponse>>();
-            books.Count.ShouldBe(2);
+            books.Count.ShouldBe(3);
 
         }
     }

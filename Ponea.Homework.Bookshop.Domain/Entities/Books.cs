@@ -33,12 +33,12 @@ namespace Ponea.Homework.Bookshop.Domain.Entities
         public string IsbnCode { get; set; }
 
         /// <summary>
-        /// Gets or sets the authors.
+        /// Gets or sets the book authors.
         /// </summary>
         /// <value>
-        /// The authors.
+        /// The book authors.
         /// </value>
-        public List<Author> Authors { get; set; }
+        public List<BookAuthor> BookAuthors { get; set; }
 
         /// <summary>
         /// Gets or sets the category identifier.

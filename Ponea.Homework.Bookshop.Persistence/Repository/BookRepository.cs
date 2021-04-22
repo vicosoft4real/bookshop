@@ -34,9 +34,9 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
         /// <returns></returns>
         public async Task<List<Books>> GetBooksByAuthorName(string authName)
         {
-            var query = await PoneaBookshopContext.Books.Include(x => x.Authors)
-                .Where(x => x.Authors.Any(author => string.Equals(author.FirstName, authName, StringComparison.Ordinal)) || x.Authors.Any(author =>
-                     string.Equals(author.LastName, authName, StringComparison.Ordinal))).ToListAsync();
+            var query = await PoneaBookshopContext.Books.Include(x => x.BookAuthors)
+                .Where(x => x.BookAuthors.Any(author => string.Equals(author.Author.LastName, authName, StringComparison.Ordinal)) || x.BookAuthors.Any(author =>
+                     string.Equals(author.Author.LastName, authName, StringComparison.Ordinal))).ToListAsync();
 
             return query;
         }
@@ -51,6 +51,32 @@ namespace Ponea.Homework.Bookshop.Persistence.Repository
                 .Where(x => x.Category.Title.Equals(categoryName)).ToListAsync();
 
             return query;
+        }
+
+        /// <summary>
+        /// Creates the book.
+        /// </summary>
+        /// <param name="books">The books.</param>
+        /// <param name="authors">The authors.</param>
+        /// <returns></returns>
+
+        public async Task<Books> CreateBook(Books books, List<Author> authors)
+        {
+            await PoneaBookshopContext.Books.AddAsync(books);
+            await PoneaBookshopContext.SaveChangesAsync();
+
+            foreach (var author in authors)
+            {
+                PoneaBookshopContext.BookAuthors.Add(new BookAuthor()
+                {
+                    Author = author,
+                    BookId = books.Id
+
+                });
+            }
+
+            await PoneaBookshopContext.SaveChangesAsync();
+            return books;
         }
     }
 }

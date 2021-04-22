@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -184,6 +185,14 @@ namespace Ponea.Homework.Bookshop.Application.UnitTests.Books.Commands
                 IsbnCode = "0-19-190291-2",
                 Title = "new Expert in c# 9",
                 CategoryId = Guid.Parse("{4B8C58BA-0781-4922-9BDD-9F1FC6414DDD}"),
+                Authors = new List<AuthorVm>()
+                {
+                    new AuthorVm()
+                    {
+                        FirstName = "Akin",
+                        LastName = "Bode"
+                    }
+                }
 
 
 

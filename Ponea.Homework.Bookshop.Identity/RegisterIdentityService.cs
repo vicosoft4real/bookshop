@@ -29,7 +29,8 @@ namespace Ponea.Homework.Bookshop.Identity
         {
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
 
-            services.AddDbContext<PoneaBookshopIdentityDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("GloboTicketIdentityConnectionString"),
+            services.AddDbContext<PoneaBookshopIdentityDbContext>(options => options.UseSqlServer(
+                configuration.GetConnectionString("BookShopIdentityDb"),
                 b => b.MigrationsAssembly(typeof(PoneaBookshopIdentityDbContext).Assembly.FullName)));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()

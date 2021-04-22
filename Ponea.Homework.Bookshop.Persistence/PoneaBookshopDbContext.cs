@@ -43,6 +43,14 @@ namespace Ponea.Homework.Bookshop.Persistence
         public DbSet<Category> Categories { get; set; }
 
         /// <summary>
+        /// Gets or sets the book authors.
+        /// </summary>
+        /// <value>
+        /// The book authors.
+        /// </value>
+        public DbSet<BookAuthor> BookAuthors { get; set; }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="PoneaBookshopDbContext"/> class.
         /// </summary>
         /// <param name="options">The options.</param>

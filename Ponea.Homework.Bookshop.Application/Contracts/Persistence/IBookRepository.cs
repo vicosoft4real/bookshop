@@ -25,5 +25,14 @@ namespace Ponea.Homework.Bookshop.Application.Contracts.Persistence
         /// <param name="categoryName">Name of the category.</param>
         /// <returns></returns>
         Task<List<Books>> GetBooksByCategory(string categoryName);
+
+        /// <summary>
+        /// Creates the book.
+        /// </summary>
+        /// <param name="books">The books.</param>
+        /// <param name="authors">The authors.</param>
+        /// <returns></returns>
+        Task<Books> CreateBook(Books books, List<Author> authors);
+
     }
 }

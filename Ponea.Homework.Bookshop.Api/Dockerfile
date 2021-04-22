@@ -8,6 +8,10 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["Ponea.Homework.Bookshop.Api/Ponea.Homework.Bookshop.Api.csproj", "Ponea.Homework.Bookshop.Api/"]
+COPY ["Ponea.Homework.Bookshop.Identity/Ponea.Homework.Bookshop.Identity.csproj", "Ponea.Homework.Bookshop.Identity/"]
+COPY ["Ponea.Homework.Bookshop.Application/Ponea.Homework.Bookshop.Application.csproj", "Ponea.Homework.Bookshop.Application/"]
+COPY ["Ponea.Homework.Bookshop.Domain/Ponea.Homework.Bookshop.Domain.csproj", "Ponea.Homework.Bookshop.Domain/"]
+COPY ["Ponea.Homework.Bookshop.Persistence/Ponea.Homework.Bookshop.Persistence.csproj", "Ponea.Homework.Bookshop.Persistence/"]
 RUN dotnet restore "Ponea.Homework.Bookshop.Api/Ponea.Homework.Bookshop.Api.csproj"
 COPY . .
 WORKDIR "/src/Ponea.Homework.Bookshop.Api"
