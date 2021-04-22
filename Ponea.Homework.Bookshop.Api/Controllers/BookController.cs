@@ -37,6 +37,7 @@ namespace Ponea.Homework.Bookshop.Api.Controllers
         /// <param name="size">The size.</param>
         /// <returns></returns>
         [HttpGet("all")]
+        [ResponseCache()]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllBooks(int page = 1, int size = 10)
         {
@@ -52,6 +53,7 @@ namespace Ponea.Homework.Bookshop.Api.Controllers
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBookById(Guid id)
         {
@@ -67,6 +69,7 @@ namespace Ponea.Homework.Bookshop.Api.Controllers
         /// <param name="name">The name.</param>
         /// <returns></returns>
         [Authorize]
+        [ResponseCache()]
         [HttpGet("{name}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> GetBookByCategoryName(string name)
@@ -81,6 +84,7 @@ namespace Ponea.Homework.Bookshop.Api.Controllers
         /// </summary>
         /// <param name="authorName">Name of the author.</param>
         /// <returns></returns>
+        [ResponseCache()]
         [Authorize]
         [HttpGet("{authorName}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
