@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
-using System.Collections.Generic;
 using Ponea.Homework.Bookshop.Api.Middleware;
 using Ponea.Homework.Bookshop.Api.Services;
 using Ponea.Homework.Bookshop.Application;
@@ -43,7 +41,7 @@ namespace Ponea.Homework.Bookshop.Api
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
-            AddSwagger(services);
+            services.AddDocSwagger();
             services.AddApplicationServices();
             services.AddPersistence(Configuration);
             services.AddIdentityServices(Configuration);
@@ -51,11 +49,7 @@ namespace Ponea.Homework.Bookshop.Api
             services.AddScoped<ILoggedInUserService, LoggedInUserService>();
             services.AddResponseCaching();
             services.AddControllers();
-            //services.AddSwaggerGen(c =>
-            //{
 
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Ponea.Homework.Bookshop.Api", Version = "v1" });
-            //});
             services.AddCors(options =>
             {
                 options.AddPolicy("Open", builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
@@ -75,65 +69,21 @@ namespace Ponea.Homework.Bookshop.Api
 
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
             app.UseCors("Open");
             app.UseCustomExceptionHandler();
             app.UseResponseCaching();
+            app.UseDocSwagger();
             app.UseRouting();
 
             app.UseAuthorization();
-            app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ponea.Homework.Bookshop.Api v1"));
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
 
-        private void AddSwagger(IServiceCollection services)
-        {
-            services.AddSwaggerGen(c =>
-            {
 
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    Description = @"JWT Authorization header using the Bearer scheme. \r\n\r\n 
-                      Enter 'Bearer' [space] and then your token in the text input below.
-                      \r\n\r\nExample: 'Bearer 12345abcdef'",
-                    Name = "Authorization",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer"
-                });
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
-                {
-                    {
-                        new OpenApiSecurityScheme
-                        {
-                            Reference = new OpenApiReference
-                            {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header,
-
-                        },
-                        new List<string>()
-                    }
-                });
-
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "Bookshop Assignment",
-
-                });
-
-                // c.OperationFilter<FileResultContentTypeOperationFilter>();
-            });
-        }
     }
 }
